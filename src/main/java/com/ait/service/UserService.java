@@ -1,5 +1,6 @@
 package com.ait.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class UserService {
 
     public boolean login(Map<String,Object> user){
         return userRepository.login(user);
+    }
+
+    public List<Map<String, Object>> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 
 }

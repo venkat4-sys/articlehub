@@ -1,5 +1,6 @@
 package com.ait.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ait.constant.AppConstants;
 import com.ait.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(AppConstants.USER_BASE_URL)
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("/signup")
+    @PostMapping(AppConstants.USER_SIGNUP_URL)
     public ResponseEntity<?> signup(@RequestBody Map<String, Object> user) {
         boolean result = userService.signup(user);
         if (result) {
@@ -30,7 +32,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(AppConstants.USER_LOGIN_URL)
     public ResponseEntity<?> login(@RequestBody Map<String, Object> user) {
         boolean result = userService.login(user);
         if (result) {
@@ -38,6 +40,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping(AppConstants.USER_ALL_URL)
+    public ResponseEntity<List<Map<String, Object>>> getAllUsers() {
+        List<Map<String, Object>> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
 }

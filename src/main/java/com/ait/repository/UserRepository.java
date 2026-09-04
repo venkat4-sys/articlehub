@@ -1,5 +1,6 @@
 package com.ait.repository;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserRepository {
             return false;
         } else {
             String sql2 = """
-                    INSERT INTO users(name,email,password,is_active,role) VALUES(:name,:email,:password,1,'user')
+                    INSERT INTO users(name,email,password,is_active,role) VALUES(:name,:email,:password,1,'USER')
                     """;
             MapSqlParameterSource params2 = new MapSqlParameterSource();
             params2.addValue("name", user.get("name"));
@@ -52,6 +53,16 @@ public class UserRepository {
         Integer count = jdbcTemplate1.queryForObject(sql, params, Integer.class);
 
         return count != null && count > 0;
+    }
+
+    public List<Map<String, Object>> getAllUsers() {
+        String sql = """
+                SELECT user_id, name, email, is_active, created_date
+                FROM users
+                WHERE UPPER(role) = 'USER'
+                ORDER BY created_date DESC, user_id DESC
+                """;
+        return jdbcTemplate2.queryForList(sql);
     }
 
 }
